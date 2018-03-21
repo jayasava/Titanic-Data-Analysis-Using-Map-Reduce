@@ -1,7 +1,7 @@
 # Data-Analysis-Using-Map-Reduce
 Titanic-Data-Analysis-Using-Map-Reduce
 
-# 1. Data Set Description
+# Data Set Description
 
 Passenger ID|
 Status (survived=0 & died=1)|
@@ -17,7 +17,7 @@ CabinNumber|
 EmbarkNumber
 
 Input file is Comma separated file.
-## 2. Finding Average age of people with gender who died.
+## Case 1 :Finding Average age of people with gender who died.
 Total Number of columns in the Dataset is 12 and minimum 6 columns should be present to be considered for the analysis
 ### Mapper Logic:
 #### Output Key : Gender | Output Value : Age |
