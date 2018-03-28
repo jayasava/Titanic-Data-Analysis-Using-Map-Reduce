@@ -1,0 +1,20 @@
+ public static class Map extends Mapper<LongWritable,Text,Text,IntWritable>  /* Mapper Input Key - LongWritable , Input Value - Text, Output Key - Text , Output Value - Integer */
+	{
+	  private Text gender = new Text(); /* Output Key */
+	  private IntWritable age = new IntWritable(); /* Output Value */
+	  public void mapage(LongWritable key,Text value, Context context) throws IOException,InterruptedException
+	  {
+		String line = value.toString(); /* Converting entire row into String */
+        String columns[]=line.split(","); /* Splitting into columns */
+        if(columns.length > 6) /* If Length of the list is greater than 6 */
+		{
+         if(columns[1]=="1") /* If Person is dead */
+		 {
+            gender.set(columns[4)); /* Send gender as Key */
+            age.set(Integer.ParseInt(columns[5])); /* Send Age as Value by converting into Integer */
+         }
+		}
+        content.write(gender,age);
+	  }		
+		
+    }
