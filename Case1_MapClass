@@ -1,6 +1,7 @@
- public static class Map extends Mapper<LongWritable,Text,Text,IntWritable>  /* Mapper Input Key - LongWritable , Input Value - Text, Output Key - Text , Output Value - Integer */
+
+public static class Map extends Mapper<LongWritable,Text,Text,IntWritable>  /* Mapper Input Key - LongWritable , Input Value - Text, Output Key - Text , Output Value - Integer */
 	{
-	  private Text gender = new Text(); /* Output Key */
+          private Text gender = new Text(); /* Output Key */
 	  private IntWritable age = new IntWritable(); /* Output Value */
 	  public void mapage(LongWritable key,Text value, Context context) throws IOException,InterruptedException
 	  {
