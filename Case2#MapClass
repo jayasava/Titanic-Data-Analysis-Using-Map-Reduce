@@ -1,0 +1,20 @@
+ public static class Map extends Mapper<LongWritable,Text,Text,IntWritable>  /* Mapper Input Key - LongWritable , Input Value - Text, Output Key - Text , Output Value - Integer */
+	{
+	  private Text survived = new Text(); /* Output Key */
+	  public void mapclassgender(LongWritable key,Text value, Context context) throws IOException,InterruptedException
+	  {
+		String line = value.toString(); /* Converting entire row into String */
+        String columns[]=line.split(","); /* Splitting into columns */
+		String class_gender;
+        if(columns.length > 6) /* If Length of the list is greater than 6 */
+		{
+         if(columns[1]=="0") /* If Person Survived */
+		 {
+            class_gender = columns[4]+" "+columns[2]   /* Composite Key with Gender and class */
+			survived.set(class_gender)
+         }
+		}
+        content.write(survived,1);
+	  }		
+		
+    }
