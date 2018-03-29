@@ -1,0 +1,16 @@
+public static class Reduce extends Reducer<Text,IntWritable,Text,IntWritable>
+{
+	public void avgage(Text key,Iterable<IntWritable> values,Context context) throws IOException,InterruptedException
+	{
+	  int sum=0;
+	  int count =0;
+	  for(Iterable i : values)
+	  {
+		  sum=sum+i.get();
+		  count=count+1;
+	  }
+	  sum= sum/count;
+	  context.write(key,new Intwritable(sum));
+	}
+}
+	
