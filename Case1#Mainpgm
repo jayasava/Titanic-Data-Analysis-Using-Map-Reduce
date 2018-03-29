@@ -1,0 +1,71 @@
+import java.io.IOException;
+import org.apache.hadoop.io.*; /* For Input Output Formats such as LongWritable,IntWritable,Text */
+import org.apache.hadoop.conf.Configuration; 
+import org.apache.hadoop.mapreduce.*;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+
+public class Average_age{
+
+ public static class Map extends Mapper<LongWritable,Text,Text,IntWritable>  /* Mapper Input Key - LongWritable , Input Value - Text, Output Key - Text , Output Value - Integer */
+	{
+	  private Text gender = new Text(); /* Output Key */
+	  private IntWritable age = new IntWritable(); /* Output Value */
+	  public void mapage(LongWritable key,Text value, Context context) throws IOException,InterruptedException
+	  {
+		String line = value.toString(); /* Converting entire row into String */
+        String columns[]=line.split(","); /* Splitting into columns */
+        if(columns.length > 6) /* If Length of the list is greater than 6 */
+		{
+         if(columns[1]=="1") /* If Person is dead */
+		 {
+            gender.set(columns[4)); /* Send gender as Key */
+            age.set(Integer.ParseInt(columns[5])); /* Send Age as Value by converting into Integer */
+         }
+		}
+        content.write(gender,age);
+	  }		
+		
+    }
+	
+public static class Reduce extends Reducer<Text,IntWritable,Text,IntWritable>
+{
+	public void avgage(Text key,Iterable<IntWritable> values,Context context) throws IOException,InterruptedException
+	{
+	  int sum=0;
+	  int count =0;
+	  for(Iterable i : values)
+	  {
+		  sum=sum+i.get();
+		  count=count+1;
+	  }
+	  sum= sum/count;
+	  context.write(key,new Intwritable(sum));
+	}
+}
+
+
+public static void main(String args[]) throws Exception
+{
+   Configuration conf = new Configuration();
+   Job job = new Job(conf,"Avg_age");
+   job.setJarByClass(Average_age.class);
+   job.setMapperClass(Map.class);
+   job.setReducerClass(Reduce.class);
+   job.setMapOutputKeyClass(Text.class);
+   job.setMapOutputValueClass(IntWritable.class);
+   job.setOutputKeyClass(Text.class);
+   job.setOutputValueClass(IntWritable.class);
+   job.setInputFormatClass(TextInputFormat.class);
+   job.setOutputFormatClass(TextOutputFormat.class);
+   FileInputFormat.addInputPath(job, new Path(args[0]));
+   FileOutputFormat.setOutputPath(job, new Path(args[1]));
+   Path out=new Path(args[1]);
+   out.getFileSystem(conf).delete(out);
+   job.waitForCompletion(true);
+    }
+}
+		  
